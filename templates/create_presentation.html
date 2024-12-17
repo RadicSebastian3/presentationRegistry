@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="card-title text-center mb-4">
+                    <i class="fas fa-plus-circle text-primary me-2"></i>
+                    Create New Presentation
+                </h2>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="title" class="form-label">Presentation Title</label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="datetime" class="form-label">Date and Time</label>
+                            <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="max_students" class="form-label">Maximum Students</label>
+                            <input type="number" class="form-control" id="max_students" name="max_students" 
+                                   min="1" max="30" value="30" required>
+                            <div class="form-text">Maximum allowed: 30 students</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="image" class="form-label">Presentation Image</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                            <label class="input-group-text" for="image">
+                                <i class="fas fa-upload"></i>
+                            </label>
+                        </div>
+                        <div class="form-text">Upload an image to represent your presentation (PNG, JPG, JPEG, GIF)</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>
+                            Create Presentation
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Presentations
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('image').onchange = function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Preview image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.createElement('img');
+            preview.src = e.target.result;
+            preview.style.maxWidth = '100%';
+            preview.style.marginTop = '10px';
+            preview.style.borderRadius = '8px';
+            preview.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            
+            const existingPreview = document.querySelector('.image-preview');
+            if (existingPreview) {
+                existingPreview.remove();
+            }
+            
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'image-preview mt-3';
+            previewContainer.appendChild(preview);
+            document.getElementById('image').parentNode.parentNode.appendChild(previewContainer);
+        }
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+{% endblock %} 

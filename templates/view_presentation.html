@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ presentation.title }}</h2>
+                    <h6 class="card-subtitle mb-3 text-muted">By {{ presentation.company.company_name }}</h6>
+                    <div class="mb-4">
+                        <h5 class="text-primary">Description</h5>
+                        <p class="card-text">{{ presentation.description }}</p>
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="text-primary">Date and Time</h5>
+                        <p class="card-text">{{ presentation.datetime.strftime('%B %d, %Y at %H:%M') }}</p>
+                    </div>
+                    {% if current_user.user_type == 'student' and not current_user.registrations|selectattr('presentation_id', 'equalto', presentation.id)|list %}
+                        <a href="{{ url_for('register_presentation', presentation_id=presentation.id) }}" 
+                           class="btn btn-primary btn-lg">Register for Presentation</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Registered Students</h5>
+                </div>
+                <div class="card-body">
+                    {% if presentation.registrations %}
+                        <div class="list-group list-group-flush">
+                        {% for registration in presentation.registrations %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ registration.student.first_name }} {{ registration.student.last_name }}</h6>
+                                <small class="text-muted">
+                                    Class: {{ registration.student.class_name }}<br>
+                                    Registered: {{ registration.registration_date.strftime('%Y-%m-%d') }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No students registered yet.</p>
+                    {% endif %}
+                </div>
+                {% if presentation.registrations %}
+                    <div class="card-footer bg-light">
+                        <small class="text-muted">Total Registrations: {{ presentation.registrations|length }}</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

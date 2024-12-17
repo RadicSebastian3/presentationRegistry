@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="card-title text-center mb-4">Register</h2>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="user_type" class="form-label">Register as</label>
+                        <select class="form-select form-select-lg" id="user_type" name="user_type" onchange="toggleFields()" required>
+                            <option value="">Select type</option>
+                            <option value="student">Student</option>
+                            <option value="company">Company</option>
+                        </select>
+                    </div>
+                    
+                    <div id="student_fields" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="class_name" class="form-label">Class Name</label>
+                            <input type="text" class="form-control" id="class_name" name="class_name">
+                        </div>
+                    </div>
+                    
+                    <div id="company_fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="company_name" class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="company_name" name="company_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="access_key" class="form-label">Access Key</label>
+                            <input type="password" class="form-control" id="access_key" name="access_key">
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-primary">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFields() {
+    const userType = document.getElementById('user_type').value;
+    const studentFields = document.getElementById('student_fields');
+    const companyFields = document.getElementById('company_fields');
+    
+    if (userType === 'student') {
+        studentFields.style.display = 'block';
+        companyFields.style.display = 'none';
+        document.getElementById('first_name').required = true;
+        document.getElementById('last_name').required = true;
+        document.getElementById('class_name').required = true;
+        document.getElementById('company_name').required = false;
+        document.getElementById('access_key').required = false;
+    } else if (userType === 'company') {
+        studentFields.style.display = 'none';
+        companyFields.style.display = 'block';
+        document.getElementById('first_name').required = false;
+        document.getElementById('last_name').required = false;
+        document.getElementById('class_name').required = false;
+        document.getElementById('company_name').required = true;
+        document.getElementById('access_key').required = true;
+    } else {
+        studentFields.style.display = 'none';
+        companyFields.style.display = 'none';
+        document.getElementById('first_name').required = false;
+        document.getElementById('last_name').required = false;
+        document.getElementById('class_name').required = false;
+        document.getElementById('company_name').required = false;
+        document.getElementById('access_key').required = false;
+    }
+}
+</script>
+{% endblock %} 
